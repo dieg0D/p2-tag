@@ -1,20 +1,20 @@
-#include <bits/stdc++.h>
+#include<iostream>
+#include <list>
+#include <stack>
+#include<fstream>
 using namespace std;
 
 class Graph{ // Definição da classe grafo
     int vertices;
     list<int> *adj;
-
+    
+    void DFSTopOrde(int vertices, bool visitado[], stack<int> &pilha);
     public:
         Graph(int vertices);
         void CriaListaAdj(string FileName);
         void Imprimir(int vertices);
-        void DFSTopOrde(int vertices, bool visitado[], stack<int> &pilha);
         void OrdenacaoTop();
 };
-
-
-
 
 Graph::Graph(int vertices){ //Construtor da classe grafo
     this->vertices = vertices;
@@ -51,6 +51,7 @@ void Graph::CriaListaAdj(string FileName){//Metodo que cria a lista de adjacenci
     }
 	file.close();
 }
+
 void Graph::Imprimir(int vertices){//Imprime a lista de adjacencia
     list<int>::iterator it;
     int i,j = 0;
@@ -65,15 +66,17 @@ void Graph::Imprimir(int vertices){//Imprime a lista de adjacencia
 
 }
 
-void Graph::DFSTopOrde(int vertices, bool visitado[], stack<int> &pilha){
-    visitado[vertices] = true;
+void Graph::DFSTopOrde(int vert, bool visitado[], stack<int> &pilha){
+    visitado[vert] = true;
     list<int>::iterator i;
 
-    for(i=adj[vertices].begin(); i != adj[vertices].end(); i++){
+    for(i=adj[vert].begin(); i != adj[vert].end(); i++){
         if(!visitado[*i]){
             DFSTopOrde(*i,visitado,pilha);
+    
         }
     }
+    pilha.push(vert);
 
 }
 
@@ -84,13 +87,13 @@ void Graph::OrdenacaoTop(){
         visitado[i] = false;
     }
 
-    for(int i=0; i<vertices; i++){
-        if(visitado[i] == false){
-            DFSTopOrde(i,visitado,pilha);
+    for(int j=0; j < vertices; j++){
+        if(visitado[j] == false){
+            DFSTopOrde(j,visitado,pilha);
         }
     }
 
-    while(pilha.empty() == false){
+    while(pilha.empty()== false){
         cout << pilha.top() << " ";
         pilha.pop();
 
