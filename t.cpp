@@ -1,19 +1,21 @@
-#include<iostream>
+#include <iostream>
 #include <list>
 #include <stack>
-#include<fstream>
+#include <fstream>
+#include <queue>
 using namespace std;
 
 class Graph{ // Definição da classe grafo
     int vertices;
     list<int> *adj;
     
-    void DFSTopOrde(int vertices, bool visitado[], stack<int> &pilha);
     public:
         Graph(int vertices);
         void CriaListaAdj(string FileName);
         void Imprimir(int vertices);
-        void OrdenacaoTop();
+        void DFS(int vertices, bool visitado[], stack<int> &pilha);
+        void OrdenacaoTopologica();
+        void Kahns();
 };
 
 Graph::Graph(int vertices){ //Construtor da classe grafo
@@ -66,13 +68,13 @@ void Graph::Imprimir(int vertices){//Imprime a lista de adjacencia
 
 }
 
-void Graph::DFSTopOrde(int vert, bool visitado[], stack<int> &pilha){
+void Graph::DFS(int vert, bool visitado[], stack<int> &pilha){
     visitado[vert] = true;
-    list<int>::iterator i;
+    list<int>::iterator it;
 
-    for(i=adj[vert].begin(); i != adj[vert].end(); i++){
-        if(!visitado[*i]){
-            DFSTopOrde(*i,visitado,pilha);
+    for(it=adj[vert].begin(); it != adj[vert].end(); it++){
+        if(!visitado[*it]){
+            DFS(*it,visitado,pilha);
     
         }
     }
@@ -80,7 +82,7 @@ void Graph::DFSTopOrde(int vert, bool visitado[], stack<int> &pilha){
 
 }
 
-void Graph::OrdenacaoTop(){
+void Graph::OrdenacaoTopologica(){
     stack<int> pilha;
     bool *visitado = new bool[vertices];
     for(int i=0; i<vertices; i++){
@@ -89,7 +91,7 @@ void Graph::OrdenacaoTop(){
 
     for(int j=0; j < vertices; j++){
         if(visitado[j] == false){
-            DFSTopOrde(j,visitado,pilha);
+            DFS(j,visitado,pilha);
         }
     }
 
@@ -98,6 +100,54 @@ void Graph::OrdenacaoTop(){
         pilha.pop();
 
     }    
+}
+
+void Graph::Kahns(){
+    vector<int> grau(vertices, 0);
+
+    for (int i=0; i<vertices; i++){
+        list<int>::iterator it;
+        for (it = adj[i].begin(); it != adj[i].end(); it++){
+            grau[*it]++;
+        }     
+    }
+ 
+    queue<int> fila;
+    for (int i = 0; i < vertices; i++){
+        if (grau[i] == 0){
+            fila.push(i);
+        }
+    }
+        
+
+    int count = 0;
+ 
+    vector <int> topOrd;
+ 
+    while (!fila.empty()){
+
+        int i = fila.front();
+        fila.pop();
+        topOrd.push_back(i);
+ 
+        list<int>::iterator it;
+        for (it = adj[i].begin(); it != adj[i].end(); it++){
+            if (--grau[*it] == 0){
+                fila.push(*it);
+            }
+        }
+        count++;
+    }
+ 
+    if (count != vertices){
+        cout << "Existe um ciclo no grafo \n";
+        return;
+    }
+ 
+    for (int j=0; j<topOrd.size(); j++){
+        cout << topOrd[j] << " ";
+    }
+    cout << endl;
 }
 
 int main(){
@@ -123,6 +173,8 @@ int main(){
     Graph grafo(vertices);
     grafo.CriaListaAdj(FileName);
     grafo.Imprimir(vertices);
-    grafo.OrdenacaoTop();
+    grafo.OrdenacaoTopologica();
+    cout <<endl;
+    grafo.Kahns();
     return 0;
 }
