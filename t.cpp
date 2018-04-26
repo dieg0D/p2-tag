@@ -3,8 +3,11 @@
 #include <stack>
 #include <fstream>
 #include <queue>
-using namespace std;
+#include <ctime>
 
+using namespace std;
+vector<int> top[8];
+int Gcount= 0;
 class Graph{ // Definição da classe grafo
     int vertices;
     list<int> *adj;
@@ -96,7 +99,7 @@ void Graph::OrdenacaoTopologica(){
     }
 
     while(pilha.empty()== false){
-        cout << pilha.top() << " ";
+        // cout << pilha.top() << " ";
         pilha.pop();
 
     }    
@@ -145,36 +148,100 @@ void Graph::Kahns(){
     }
  
     for (int j=0; j<topOrd.size(); j++){
-        cout << topOrd[j] << " ";
+        // cout << topOrd[j] << " ";
     }
     cout << endl;
 }
 
 int main(){
     int vertices,n;
+    double inicio,fim;
+    double tempo;
     string FileName;
-    cout << "Insira a opção:"<<endl;
-    cout << "Digite: 1 para small "<<endl;
-    cout << "Digite: 2 para med "<<endl;
-    cout << "Digite: 3 para large "<<endl;
-    cout << "Digite: 4 para huge"<<endl;
-    cout << "Opção:";
-    cin >> n;
-    switch(n){
-        case 1: vertices = 10; FileName = "top_small.txt";
-        break;
-        case 2: vertices = 100; FileName = "top_med.txt";
-        break;
-        case 3: vertices = 10000; FileName = "top_large.txt";
-        break;
-        case 4: vertices = 100000; FileName = "top_huge.txt";
-    }
+    vector<double> tempos;
 
-    Graph grafo(vertices);
-    grafo.CriaListaAdj(FileName);
-    grafo.Imprimir(vertices);
-    grafo.OrdenacaoTopologica();
+    vertices = 10;
+    FileName = "top_small.txt";
+    Graph grafo1(vertices);
+    grafo1.CriaListaAdj(FileName);
+    // grafo1.Imprimir(vertices);
+    inicio = clock();
+    grafo1.OrdenacaoTopologica();
+    fim = clock();
+    tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
+    tempos.push_back(tempo);
+    printf("Tempo em segundos: %f", tempo);
     cout <<endl;
-    grafo.Kahns();
+    inicio = clock();
+    grafo1.Kahns();
+    fim = clock();
+    tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
+    tempos.push_back(tempo);
+    printf("Tempo em segundos: %f", tempo);
+    cout <<endl;
+
+    vertices = 100; 
+    FileName = "top_med.txt";
+    Graph grafo2(vertices);
+    grafo2.CriaListaAdj(FileName);
+    // grafo2.Imprimir(vertices);
+    inicio = clock();
+    grafo2.OrdenacaoTopologica();
+    fim = clock();
+    tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
+    tempos.push_back(tempo);
+    printf("Tempo em segundos: %f", tempo);
+    cout <<endl;
+    inicio = clock();
+    grafo2.Kahns();
+    fim = clock();
+    tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
+    tempos.push_back(tempo);
+    printf("Tempo em segundos: %f", tempo);
+    cout <<endl;
+
+    vertices = 10000;
+    FileName = "top_large.txt";
+    Graph grafo3(vertices);
+    grafo3.CriaListaAdj(FileName);
+    // grafo3.Imprimir(vertices);
+    inicio = clock();
+    grafo3.OrdenacaoTopologica();
+    fim = clock();
+    tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
+    tempos.push_back(tempo);
+    printf("Tempo em segundos: %f", tempo);
+    cout <<endl;
+    inicio = clock();
+    grafo3.Kahns();
+    fim = clock();
+    tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
+    tempos.push_back(tempo);
+    printf("Tempo em segundos: %f", tempo);
+    cout <<endl;
+
+    vertices = 100000;
+    FileName = "top_huge.txt";
+    Graph grafo4(vertices);
+    grafo4.CriaListaAdj(FileName);
+    // grafo4.Imprimir(vertices);
+    inicio = clock();
+    grafo4.OrdenacaoTopologica();
+    fim = clock();
+    tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
+    tempos.push_back(tempo);
+    printf("Tempo em segundos: %f", tempo);
+    cout <<endl;
+    inicio = clock();
+    grafo4.Kahns();
+    fim = clock();
+    tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
+    tempos.push_back(tempo);
+    printf("Tempo em segundos: %f", tempo);
+    cout <<endl;
+    
+    for( int i : tempos){
+        cout << tempos[i]<<endl;
+    }
     return 0;
 }
