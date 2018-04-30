@@ -4,6 +4,10 @@
 #include <fstream>
 #include <queue>
 #include <ctime>
+#include <math.h>
+#include <stdlib.h>
+#define GNUPLOT "gnuplot -persist"
+
 
 using namespace std;
 vector<int> top[8];
@@ -153,13 +157,67 @@ void Graph::Kahns(){
     cout << endl;
 }
 
+void Plotar(int x){
+    FILE *gp;
+    gp = popen(GNUPLOT, "w");
+    if (gp == NULL) {
+        printf("Erro ao abrir pipe para o GNU plot.\n"
+            "Instale com 'sudo apt-get install gnuplot'\n");
+        exit(0);
+    }
+    if(x == 1){
+        fprintf(gp, "set key above center\n");
+        fprintf(gp, "set xlabel 'TEMPO EM SEGUNDOS'\n");
+        fprintf(gp, "set ylabel 'QUANTIDADE DE NÓS'\n");
+        fprintf(gp, "plot 'Tdata1.txt' title 'ORDENAÇÃO TOPOLÓGICA' lt rgb 'red' with lines smooth csplines, 'Kdata1.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
+    }
+    if(x == 2){
+        fprintf(gp, "set key above center\n");
+        fprintf(gp, "set xlabel 'TEMPO EM SEGUNDOS'\n");
+        fprintf(gp, "set ylabel 'QUANTIDADE DE NÓS'\n");
+        fprintf(gp, "plot 'Tdata2.txt' title 'ORDENAÇÃO TOPOLÓGICA' lt rgb 'red' with lines smooth csplines, 'Kdata2.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
+    }
+    if(x == 3){
+        fprintf(gp, "set key above center\n");
+        fprintf(gp, "set xlabel 'TEMPO EM SEGUNDOS'\n");
+        fprintf(gp, "set ylabel 'QUANTIDADE DE NÓS'\n");
+        fprintf(gp, "plot 'Tdata3.txt' title 'ORDENAÇÃO TOPOLÓGICA' lt rgb 'red' with lines smooth csplines, 'Kdata3.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
+    }
+    if(x == 4){
+        fprintf(gp, "set key above center\n");
+        fprintf(gp, "set xlabel 'TEMPO EM SEGUNDOS'\n");
+        fprintf(gp, "set ylabel 'QUANTIDADE DE NÓS'\n");
+        fprintf(gp, "plot 'Tdata4.txt' title 'ORDENAÇÃO TOPOLÓGICA' lt rgb 'red' with lines smooth csplines, 'Kdata4.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
+    }
+    fclose(gp);
+}
+
 int main(){
-    int vertices,n;
+    int vertices, n, vert;
     double inicio,fim;
-    double tempo;
+    double tempo, tempno, g;
     string FileName;
     vector<double> tempos;
+    int nos[4];
+    nos[0] = 10;
+    nos[1] = 100;
+    nos[2] = 1000;
+    nos[3] = 10000;
+    FILE *Tarq1;
+    FILE *Tarq2;
+    FILE *Tarq3;
+    FILE *Tarq4;
 
+    FILE *Karq1;
+    FILE *Karq2;
+    FILE *Karq3;
+    FILE *Karq4;
+
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+
+    Tarq1 = fopen("Tdata1.txt", "wt");
     vertices = 10;
     FileName = "top_small.txt";
     Graph grafo1(vertices);
@@ -170,16 +228,37 @@ int main(){
     fim = clock();
     tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
     tempos.push_back(tempo);
-    printf("Tempo em segundos: %f", tempo);
-    cout <<endl;
+    tempno = tempo/10;
+    g = 0.0;
+    vert = 1;
+    while(g<=tempo && vert<=vertices){
+        fprintf(Tarq1, "%f %d\n", g, vert);
+        g = g + tempno;
+        vert++;
+    }
+    fclose(Tarq1);
+
+    Karq1 = fopen("Kdata1.txt", "wt");
     inicio = clock();
     grafo1.Kahns();
     fim = clock();
     tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
     tempos.push_back(tempo);
-    printf("Tempo em segundos: %f", tempo);
-    cout <<endl;
+    tempno = tempo/10;
+    g = 0.0;
+    vert = 1;
+    while(g<=tempo && vert<=vertices){
+        fprintf(Karq1, "%f %d\n", g, vert);
+        g = g + tempno;
+        vert++;
+    }
+    fclose(Karq1);
 
+    ///////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+   
+    Tarq2 = fopen("Tdata2.txt", "wt");
     vertices = 100; 
     FileName = "top_med.txt";
     Graph grafo2(vertices);
@@ -190,16 +269,37 @@ int main(){
     fim = clock();
     tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
     tempos.push_back(tempo);
-    printf("Tempo em segundos: %f", tempo);
-    cout <<endl;
+    tempno = tempo/100;
+    g = 0.0;
+    vert = 1;
+    while(g<=tempo && vert<=vertices){
+        fprintf(Tarq2, "%f %d\n", g, vert);
+        g = g + tempno;
+        vert++;
+    }    
+    fclose(Tarq2);
+
+    Karq2 = fopen("Kdata2.txt", "wt");
     inicio = clock();
     grafo2.Kahns();
     fim = clock();
     tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
     tempos.push_back(tempo);
-    printf("Tempo em segundos: %f", tempo);
-    cout <<endl;
+    tempno = tempo/100;
+    g = 0.0;
+    vert = 1;
+    while(g<=tempo && vert<=vertices){
+        fprintf(Karq2, "%f %d\n", g, vert);
+        g = g + tempno;
+        vert++;
+    }
+    fclose(Karq2);
 
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+
+    Tarq3 = fopen("Tdata3.txt", "wt");        
     vertices = 10000;
     FileName = "top_large.txt";
     Graph grafo3(vertices);
@@ -210,16 +310,37 @@ int main(){
     fim = clock();
     tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
     tempos.push_back(tempo);
-    printf("Tempo em segundos: %f", tempo);
-    cout <<endl;
+    tempno = tempo/10000;
+    g = 0.0;
+    vert = 1;
+    while(g<=tempo && vert<=vertices){
+        fprintf(Tarq3, "%f %d\n", g, vert);
+        g = g + tempno;
+        vert++;
+    }
+    fclose(Tarq3);
+
+    Karq3 = fopen("Kdata3.txt", "wt");
     inicio = clock();
     grafo3.Kahns();
     fim = clock();
     tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
     tempos.push_back(tempo);
-    printf("Tempo em segundos: %f", tempo);
-    cout <<endl;
+    tempno = tempo/10000;
+    g = 0.0;
+    vert = 1;
+    while(g<=tempo && vert<=vertices){
+        fprintf(Karq3, "%f %d\n", g, vert);
+        g = g + tempno;
+        vert++;
+    }
+    fclose(Karq3);
 
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+
+    Tarq4 = fopen("Tdata4.txt", "wt");
     vertices = 100000;
     FileName = "top_huge.txt";
     Graph grafo4(vertices);
@@ -230,18 +351,42 @@ int main(){
     fim = clock();
     tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
     tempos.push_back(tempo);
-    printf("Tempo em segundos: %f", tempo);
-    cout <<endl;
+    tempno = tempo/100000;
+    g = 0.0;
+    vert = 1;
+    while(g<=tempo && vert<=vertices){
+        fprintf(Tarq4, "%f %d\n", g, vert);
+        g = g + tempno;
+        vert++;
+    }
+    fclose(Tarq4);
+
+    Karq4 = fopen("Kdata4.txt", "wt");
     inicio = clock();
     grafo4.Kahns();
     fim = clock();
     tempo = (double(fim-inicio)/CLOCKS_PER_SEC);
     tempos.push_back(tempo);
-    printf("Tempo em segundos: %f", tempo);
-    cout <<endl;
-    
-    for( int i : tempos){
-        cout << tempos[i]<<endl;
+    tempno = tempo/100000;
+    g = 0.0;
+    vert = 1;
+    while(g<=tempo && vert<=vertices){
+        fprintf(Karq4, "%f %d\n", g, vert);
+        g = g + tempno;
+        vert++;
     }
+    fclose(Karq4);
+
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+    printf("\n           Graficos        \nOrdenacao Topologica VS Kahns\n\n1. 10 vertices\n2. 100 vertices\n3. 10000 vertices\n4. 100000 vertices\n\n   Opcao:   ");
+    int x;
+    scanf("%d", &x);
+    printf("%c\n", &x);
+    if(x<1 || x>4){
+        printf("Opcao invalida!!");
+    }
+    Plotar(x);
     return 0;
 }
