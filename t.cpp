@@ -380,12 +380,29 @@ int main(){
     //////////////////////////////////////////
     //////////////////////////////////////////
     //////////////////////////////////////////
-    printf("\n           Graficos        \nOrdenacao Topologica VS Kahns\n\n1. 10 vertices\n2. 100 vertices\n3. 10000 vertices\n4. 100000 vertices\n\n   Opcao:   ");
+    printf("\n           Graficos        \nOrdenacao Topologica VS Kahns\n\n1. 10 vertices\n2. 100 vertices\n3. 10000 vertices\n4. 100000 vertices\n\n(Imprime o digrafo e plota o grafico de exec.temporal)\n Opcao:   ");
     int x;
     scanf("%d", &x);
-    printf("%c\n", &x);
     if(x<1 || x>4){
         printf("Opcao invalida!!");
+    }
+    if(x==1){
+        grafo1.Imprimir(10);
+        printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
+    }
+    if(x==2){
+        grafo2.Imprimir(100);
+            printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
+
+    }
+    if(x==3){
+        grafo3.Imprimir(10000);
+        printf("Em alguns casos da execucao da ordenacao, o algoritmo de Kahns pode ser mais rapido nesse caso especifico de numero de vertices, mas na maioria das vezes o de Ordenacao topologica sera mais eficiente.\n");
+    }
+    if(x==4){
+        grafo4.Imprimir(100000);
+        printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
+ 
     }
     Plotar(x);
     return 0;
