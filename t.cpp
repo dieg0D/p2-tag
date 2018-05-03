@@ -9,7 +9,14 @@
 #define GNUPLOT "gnuplot -persist"
 
 
+
+
 using namespace std;
+
+FILE *TDFS;
+FILE *KAN;
+
+
 vector<int> top[8];
 int Gcount= 0;
 class Graph{ // Definição da classe grafo
@@ -104,6 +111,7 @@ void Graph::OrdenacaoTopologica(){
 
     while(pilha.empty()== false){
         // cout << pilha.top() << " ";
+        fprintf(TDFS, "%d ", pilha.top());
         pilha.pop();
 
     }    
@@ -153,6 +161,7 @@ void Graph::Kahns(){
  
     for (int j=0; j<topOrd.size(); j++){
         // cout << topOrd[j] << " ";
+        fprintf(KAN, "%d ", topOrd[j]);
     }
     cout << endl;
 }
@@ -169,30 +178,34 @@ void Plotar(int x){
         fprintf(gp, "set key above center\n");
         fprintf(gp, "set xlabel 'TEMPO EM SEGUNDOS'\n");
         fprintf(gp, "set ylabel 'QUANTIDADE DE NÓS'\n");
-        fprintf(gp, "plot 'Tdata1.txt' title 'ORDENAÇÃO TOPOLÓGICA' lt rgb 'red' with lines smooth csplines, 'Kdata1.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
+        fprintf(gp, "plot 'Tdata1.txt' title 'ORDENAÇÃO TOPOLÓGICA (DFS)' lt rgb 'red' with lines smooth csplines, 'Kdata1.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
     }
     if(x == 2){
         fprintf(gp, "set key above center\n");
         fprintf(gp, "set xlabel 'TEMPO EM SEGUNDOS'\n");
         fprintf(gp, "set ylabel 'QUANTIDADE DE NÓS'\n");
-        fprintf(gp, "plot 'Tdata2.txt' title 'ORDENAÇÃO TOPOLÓGICA' lt rgb 'red' with lines smooth csplines, 'Kdata2.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
+        fprintf(gp, "plot 'Tdata2.txt' title 'ORDENAÇÃO TOPOLÓGICA (DFS)' lt rgb 'red' with lines smooth csplines, 'Kdata2.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
     }
     if(x == 3){
         fprintf(gp, "set key above center\n");
         fprintf(gp, "set xlabel 'TEMPO EM SEGUNDOS'\n");
         fprintf(gp, "set ylabel 'QUANTIDADE DE NÓS'\n");
-        fprintf(gp, "plot 'Tdata3.txt' title 'ORDENAÇÃO TOPOLÓGICA' lt rgb 'red' with lines smooth csplines, 'Kdata3.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
+        fprintf(gp, "plot 'Tdata3.txt' title 'ORDENAÇÃO TOPOLÓGICA (DFS)' lt rgb 'red' with lines smooth csplines, 'Kdata3.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
     }
     if(x == 4){
         fprintf(gp, "set key above center\n");
         fprintf(gp, "set xlabel 'TEMPO EM SEGUNDOS'\n");
         fprintf(gp, "set ylabel 'QUANTIDADE DE NÓS'\n");
-        fprintf(gp, "plot 'Tdata4.txt' title 'ORDENAÇÃO TOPOLÓGICA' lt rgb 'red' with lines smooth csplines, 'Kdata4.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
+        fprintf(gp, "plot 'Tdata4.txt' title 'ORDENAÇÃO TOPOLÓGICA (DFS)' lt rgb 'red' with lines smooth csplines, 'Kdata4.txt' title 'KAHNS' lt rgb 'blue' with lines smooth csplines\n");
     }
     fclose(gp);
 }
 
+
+
 int main(){
+	TDFS = fopen("TDFS.txt", "wt");
+	KAN = fopen("KAN.txt", "wt");
     int vertices, n, vert;
     double inicio,fim;
     double tempo, tempno, g;
@@ -380,30 +393,37 @@ int main(){
     //////////////////////////////////////////
     //////////////////////////////////////////
     //////////////////////////////////////////
-    printf("\n           Graficos        \nOrdenacao Topologica VS Kahns\n\n1. 10 vertices\n2. 100 vertices\n3. 10000 vertices\n4. 100000 vertices\n\n(Imprime o digrafo e plota o grafico de exec.temporal)\n Opcao:   ");
-    int x;
-    scanf("%d", &x);
-    if(x<1 || x>4){
-        printf("Opcao invalida!!");
-    }
-    if(x==1){
-        grafo1.Imprimir(10);
-        printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
-    }
-    if(x==2){
-        grafo2.Imprimir(100);
-            printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
 
-    }
-    if(x==3){
-        grafo3.Imprimir(10000);
-        printf("Em alguns casos da execucao da ordenacao, o algoritmo de Kahns pode ser mais rapido nesse caso especifico de numero de vertices, mas na maioria das vezes o de Ordenacao topologica sera mais eficiente.\n");
-    }
-    if(x==4){
-        grafo4.Imprimir(100000);
-        printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
- 
-    }
-    Plotar(x);
+    fclose(TDFS);
+	fclose(KAN);
+    
+    int x;
+    do {
+    	printf("\n           Graficos        \nOrdenacao Topologica VS Kahns\n\n1. 10 vertices\n2. 100 vertices\n3. 10000 vertices\n4. 100000 vertices\n5. Sair\n\n(Imprime o digrafo e plota o grafico de exec.temporal)\n Opcao:   ");
+	    scanf("%d", &x);
+	    switch(x){
+	    	case 1:	grafo1.Imprimir(10);
+        			printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
+	    			Plotar(x); break;
+
+	    	case 2: grafo2.Imprimir(100);
+            		printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
+	    			Plotar(x); break;
+
+	    	case 3: grafo3.Imprimir(10000);
+        			printf("Em alguns casos da execucao da ordenacao, o algoritmo de Kahns pode ser mais rapido nesse caso especifico de numero de vertices, mas na maioria das vezes o de Ordenacao topologica sera mais eficiente.\n");
+	    			Plotar(x); break;
+
+	    	case 4: grafo4.Imprimir(100000);
+       				printf("Como pudemos ver no grafico a escolha do algoritmo de ordenacao topologica e clara, pois seu tempo de execucao e muito menor.\n");
+	    			Plotar(x); break;
+
+	    	case 5:	printf("Valeu mano Dibio, dibioa!!"); break;
+	    	
+	    	default: printf("Opcao invalida!!");
+	    }
+	}while(x!=5);
+
+
     return 0;
 }
